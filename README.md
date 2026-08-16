@@ -14,7 +14,6 @@
 
 #### Demo
 
-> **GIF coming soon** — upload your demo recording as `project-iot/demo.gif` and it will appear here.
 
 ![System Demo](project-iot/demo.gif)
 
