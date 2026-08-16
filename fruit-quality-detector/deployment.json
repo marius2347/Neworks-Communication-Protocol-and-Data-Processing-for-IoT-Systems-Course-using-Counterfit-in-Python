@@ -1,0 +1,54 @@
+{
+  "modulesContent": {
+    "$edgeAgent": {
+      "properties.desired": {
+        "schemaVersion": "1.1",
+        "runtime": {
+          "type": "docker",
+          "settings": {
+            "minDockerVersion": "v1.25",
+            "registryCredentials": {
+              "ClassifierRegistry": {
+                "username": "fruitqualitydetectormarius23",
+                "password": "DUKIvkAPkUxrcQfRHGa7HP1a3g6J0ZL215SFZzL0cXuvdp3EI2QLJQQJ99CEACfhMk5Eqg7NAAACAZCR2176",
+                "address": "fruitqualitydetectormarius23.azurecr.io"
+              }
+            }
+          }
+        },
+        "systemModules": {
+          "edgeAgent": { "type": "docker", "settings": { "image": "mcr.microsoft.com/azureiotedge-agent:1.5" } },
+          "edgeHub": {
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "mcr.microsoft.com/azureiotedge-hub:1.5",
+              "createOptions": "{\"HostConfig\":{\"PortBindings\":{\"5671/tcp\":[{\"HostPort\":\"5671\"}],\"8883/tcp\":[{\"HostPort\":\"8883\"}],\"443/tcp\":[{\"HostPort\":\"443\"}]}}}"
+            }
+          }
+        },
+        "modules": {
+          "ImageClassifier": {
+            "version": "1.0", "type": "docker", "status": "running", "restartPolicy": "always",
+            "settings": {
+              "image": "fruitqualitydetectormarius23.azurecr.io/classifier:v1",
+              "createOptions": "{\"ExposedPorts\": {\"80/tcp\": {}},\"HostConfig\": {\"PortBindings\": {\"80/tcp\": [{\"HostPort\": \"80\"}]}}}"
+            }
+          }
+        }
+      }
+    },
+    "$edgeHub": {
+      "properties.desired": {
+        "schemaVersion": "1.1",
+        "routes": {
+          "upstream": "FROM /messages/* INTO $upstream"
+        },
+        "storeAndForwardConfiguration": {
+          "timeToLiveSecs": 7200
+        }
+      }
+    }
+  }
+}
