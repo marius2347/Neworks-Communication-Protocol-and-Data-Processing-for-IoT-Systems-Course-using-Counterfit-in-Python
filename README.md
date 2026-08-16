@@ -12,6 +12,12 @@
 **Folder:** `project-iot/` | **File:** `aquaculture_monitor.py`
 **Submitted:** May 2026
 
+#### Demo
+
+> **GIF coming soon** — upload your demo recording as `project-iot/demo.gif` and it will appear here.
+
+![System Demo](project-iot/demo.gif)
+
 #### Overview
 
 A fully automated, edge-computing IoT system that monitors and controls water quality parameters in an aquaculture environment. Built using Python with CounterFit virtual hardware simulation, the system implements a complete feedback loop: sensor data acquisition → automated actuation → cloud alerting → interactive CLI control.
@@ -93,22 +99,150 @@ On exit, the system sends `off()` commands to both relays (pins 7 and 8) before 
 
 ## Course Lab Exercises
 
-The following folders contain lab work completed during the course lectures. Each lab builds up toward the final project concepts.
+The following labs were completed during the course lectures. Each one builds toward the final project concepts.
 
-| Folder | Topic |
-|--------|-------|
-| `temperature-sensor/` | DHT11 sensor reading via CounterFit, MQTT telemetry publishing |
-| `temperature-sensor-server/` | MQTT subscriber, CSV logging, Growing Degree Days (GDD) calculator |
-| `nightlight/` | Grove light sensor + LED control via MQTT pub/sub |
-| `nightlight-server/` | MQTT server that commands LED based on light threshold |
-| `soil-moisture-sensor/` | Azure IoT Hub (X.509 auth), ADC soil moisture, relay direct methods |
-| `soil-moisture-sensor-server/` | MQTT server with relay automation logic |
-| `soil-moisture-trigger/` | Azure Function (Event Hub trigger) invoking IoT Hub direct methods |
-| `gps-sensor/` | NMEA GPS parsing, lat/lon extraction, Azure IoT Hub telemetry |
-| `gps-trigger/` | Azure Function storing GPS data as JSON blobs in Azure Blob Storage |
-| `smart-timer/` | Azure Cognitive Services Speech SDK, continuous speech recognition |
-| `fruit-quality-detector/` | Pi camera + Azure Custom Vision, VL53L0X distance sensor, Docker/TFLite edge deployment |
-| `stock-counter/` | Azure Custom Vision object detection + PIL bounding box drawing |
+---
+
+### Lab 1 — Temperature Sensor
+**Folders:** `temperature-sensor/` · `temperature-sensor-server/`
+
+Reads temperature and humidity from a virtual DHT11 sensor via CounterFit and publishes telemetry every 10 minutes to an MQTT broker. The server side subscribes, stores readings into a CSV file with timestamps, and includes a Growing Degree Days (GDD) calculator for plant growth monitoring.
+
+| Setup | CounterFit sensor config | Output CSV |
+|-------|--------------------------|------------|
+| ![Lab 1 image 1](temperature-sensor/L1/1.jpg) | ![Lab 1 image 2](temperature-sensor/L1/2.jpg) | ![Lab 1 image 3](temperature-sensor/L1/3.jpg) |
+
+---
+
+### Lab 2 — Nightlight (MQTT Pub/Sub)
+**Folders:** `nightlight/` · `nightlight-server/`
+
+A Grove light sensor reads ambient brightness and publishes it to a public MQTT broker (`test.mosquitto.org`). The server subscribes to the telemetry topic: if light drops below 300, it sends a command to turn an LED on; otherwise it turns it off. Demonstrates the full MQTT publish/subscribe loop between a simulated IoT device and a remote server.
+
+**Lab 3 — Basic sensor + LED wiring:**
+
+| CounterFit setup | Sensor reading in terminal |
+|------------------|---------------------------|
+| ![L3 image 1](nightlight/L3/1.jpg) | ![L3 image 2](nightlight/L3/2.jpg) |
+
+![L3 overall view](nightlight/L3/image3.jpg)
+
+**Lab 4 — Full MQTT client/server loop:**
+
+| MQTT publish | Command received | LED on | LED off |
+|--------------|-----------------|--------|---------|
+| ![L4 image 1](nightlight/L4/1.jpg) | ![L4 image 2](nightlight/L4/2.jpg) | ![L4 image 3](nightlight/L4/3.jpg) | ![L4 image 4](nightlight/L4/4.jpg) |
+
+---
+
+### Lab 3 — Soil Moisture Sensor
+**Folders:** `soil-moisture-sensor/` · `soil-moisture-sensor-server/` · `soil-moisture-trigger/`
+
+An ADC reads soil moisture values via CounterFit. The device connects to **Azure IoT Hub** using X.509 certificate authentication and sends telemetry every 10 seconds. Direct method calls (`relay_on` / `relay_off`) control a virtual relay. The MQTT server automates watering: if moisture exceeds 450, the relay activates for 5 seconds, waits 20 seconds, then resumes monitoring. An Azure Function (Event Hub trigger) also invokes direct methods from the cloud.
+
+**Lab 6 — Azure IoT Hub connection:**
+
+![L6](soil-moisture-sensor/L6/1.jpg)
+
+**Lab 7 — Sending telemetry + relay control:**
+
+| Sending message | Relay ON | Relay OFF |
+|-----------------|----------|-----------|
+| ![L7 image 1](soil-moisture-sensor/L7/1.jpg) | ![L7 image 2](soil-moisture-sensor/L7/2.jpg) | ![L7 image 3](soil-moisture-sensor/L7/3.jpg) |
+
+**Lab 8 — X.509 certificate authentication:**
+
+![L8](soil-moisture-sensor/L8/1.jpg)
+
+**Lab 9 — Azure Function trigger:**
+
+| Function trigger firing | Cloud direct method invoked |
+|-------------------------|-----------------------------|
+| ![L9 image 1](soil-moisture-trigger/L9/1.jpg) | ![L9 image 2](soil-moisture-trigger/L9/2.jpg) |
+
+**Lab 10 — End-to-end automated watering:**
+
+![L10](soil-moisture-sensor/L10/1.jpg)
+
+---
+
+### Lab 4 — GPS Sensor
+**Folders:** `gps-sensor/` · `gps-trigger/`
+
+Reads NMEA sentences from a virtual serial port via CounterFit. GGA sentences are parsed with `pynmea2` to extract latitude and longitude, which are sent as JSON telemetry to **Azure IoT Hub** every 60 seconds. An Azure Function stores each GPS event as a timestamped JSON blob in **Azure Blob Storage**, organized by device ID.
+
+**Lab 11 — GPS parsing + IoT Hub:**
+
+| GPS telemetry sent | IoT Hub message received |
+|--------------------|--------------------------|
+| ![L11 image 1](gps-sensor/L11/1.jpg) | ![L11 image 2](gps-sensor/L11/2.jpg) |
+
+**Lab 12 — Azure Function + Blob Storage:**
+
+| Function trigger | Blob stored |
+|------------------|-------------|
+| ![L12 image 1](gps-sensor/L12/1.jpg) | ![L12 image 2](gps-sensor/L12/2.jpg) |
+
+---
+
+### Lab 5 — Smart Timer (Speech Recognition)
+**Folder:** `smart-timer/`
+
+Uses the **Azure Cognitive Services Speech SDK** to perform continuous speech recognition in English (GB), Sweden Central region. Recognized speech is printed to the console in real time using an event-driven callback model.
+
+![Smart Timer](smart-timer/1.jpg)
+
+---
+
+### Lab 6 — Fruit Quality Detector
+**Folder:** `fruit-quality-detector/`
+
+Captures a JPEG image from a virtual Pi camera via CounterFit and sends it to an **Azure Custom Vision** image classification endpoint. The model returns confidence percentages for `ripe` vs `unripe` labels. Also includes a VL53L0X time-of-flight distance sensor to measure how far a fruit is from the camera before triggering the capture.
+
+The `Lab15images/` folder contains the full training and testing dataset — 25 ripe and 29 unripe banana images used to train the Custom Vision model.
+
+**Training dataset samples:**
+
+| Ripe | Unripe |
+|------|--------|
+| ![Ripe banana](fruit-quality-detector/Lab15images/images/training/ripe/banana-ripe-1.png) | ![Unripe banana](fruit-quality-detector/Lab15images/images/training/unripe/banana-unripe-1.png) |
+
+**Testing dataset samples:**
+
+| Ripe test | Unripe test |
+|-----------|-------------|
+| ![Ripe test 1](fruit-quality-detector/Lab15images/images/testing/ripe/banana-ripe-1.png) | ![Unripe test 1](fruit-quality-detector/Lab15images/images/testing/unripe/banana-unripe-1.png) |
+
+**Captured inference image:**
+
+![Captured image for prediction](fruit-quality-detector/image.jpg)
+
+**Lab 16 — Custom Vision model training:**
+
+![Lab 16](fruit-quality-detector/Lab16/1.jpg)
+
+**Lab 17 — Running predictions:**
+
+![Lab 17](fruit-quality-detector/Lab17/1.jpg)
+
+**Lab 18 — Edge deployment (Docker / TFLite):**
+
+![Lab 18](fruit-quality-detector/Lab18/1.jpg)
+
+---
+
+### Lab 7 — Stock Counter
+**Folder:** `stock-counter/`
+
+Captures an image with a virtual Pi camera and sends it to an **Azure Custom Vision** object detection model. Predictions above 30% confidence are displayed and annotated on the image using PIL bounding boxes. Uses IoU (intersection-over-union) overlap filtering via `shapely` to remove duplicate detections.
+
+| Detection result | Annotated bounding boxes |
+|-----------------|--------------------------|
+| ![Stock counter 1](stock-counter/1.jpg) | ![Stock counter 2](stock-counter/2.jpg) |
+
+**Captured inference image:**
+
+![Stock counter captured image](stock-counter/image.jpg)
 
 ---
 
