@@ -2,7 +2,6 @@
 
 **Course:** Networks, Communication Protocols and Data Processing for IoT Systems
 **Institution:** National University of Science and Technology POLITEHNICA Bucharest
-**Contact:** mariusc0023@gmail.com
 
 ---
 
