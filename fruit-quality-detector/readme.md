@@ -1,3 +1,3 @@
-HostName=fruit-quality-detector-iot.azure-devices.net;DeviceId=fruit-quality-detectoredge;SharedAccessKey=dbMym213Rm/Pht+ijbiPvuho2u8PMzIkyCn9a37gXO0=
+# Fruit Quality Detector
 
-DUKIvkAPkUxrcQfRHGa7HP1a3g6J0ZL215SFZzL0cXuvdp3EI2QLJQQJ99CEACfhMk5Eqg7NAAACAZCR2176
+Add your Azure IoT Hub connection string and ACR credentials to deployment.json before deploying.

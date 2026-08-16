@@ -10,7 +10,7 @@
             "registryCredentials": {
               "ClassifierRegistry": {
                 "username": "fruitqualitydetectormarius23",
-                "password": "DUKIvkAPkUxrcQfRHGa7HP1a3g6J0ZL215SFZzL0cXuvdp3EI2QLJQQJ99CEACfhMk5Eqg7NAAACAZCR2176",
+                "password": "YOUR_ACR_PASSWORD",
                 "address": "fruitqualitydetectormarius23.azurecr.io"
               }
             }
